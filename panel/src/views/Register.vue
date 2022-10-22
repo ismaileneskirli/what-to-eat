@@ -19,7 +19,9 @@
 <script setup>
 import { ref } from "vue";
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth"
+import { getFirestore } from "firebase/firestore";
 import router from "../router";
+import {createUser} from "../lib/user.api"
 
 const email = ref("")
 const password = ref("")
@@ -27,8 +29,15 @@ const errorMessage = ref("")
 
 const register = async() => {
   try {
-    const authPromise = await createUserWithEmailAndPassword(getAuth(), email.value, password.value)  
+    const authPromise = await createUserWithEmailAndPassword(getAuth(), email.value, password.value)
     console.log("successfully registered: ", authPromise);
+    createUser({
+      user_id: authPromise.user.uid,
+      name: authPromise.user.displayName || "",
+      signed_in_at: Date.now(),
+      ingredients_list: [],
+      buy_list: []
+    })
     router.push('/random-recipe')
   } catch (error) {
     console.log(error.code);
@@ -37,6 +46,8 @@ const register = async() => {
       errorMessage.value = "Invalid email"
       case "auth/weak-password":
       errorMessage.value = "Weak password, passwords should be at least 6 charachers long"
+      case "auth/email-already-in-use":
+      errorMessage.value = "Email is already in use"
         
     
       default:

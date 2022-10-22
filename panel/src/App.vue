@@ -3,7 +3,7 @@ import { RouterLink, RouterView, useRouter } from "vue-router";
 import { useQuasar } from 'quasar';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import { onMounted, ref } from "vue";
-import {  useUserStore} from "./stores/user";
+import { useUserStore } from "./stores/user";
 
 
 const $q = useQuasar();
@@ -37,7 +37,7 @@ onMounted(() => {
 })
 
 const handleSignOut = () => {
-  signOut(auth).then(()=> {
+  signOut(auth).then(() => {
     router.push("/")
   })
 }
@@ -62,12 +62,13 @@ const userStore = useUserStore()
           WhatToEat
         </q-toolbar-title>
 
-        <q-btn  v-if="isLoggedIn" dense flat round icon="menu" @click="toggleRightDrawer" />
+        <q-btn v-if="isLoggedIn" dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
 
       <q-tabs align="center">
         <q-route-tab v-if="isLoggedIn" :to="{ name: 'randomRecipe' }" label="I'm Feeling Lucky" />
         <q-route-tab v-if="isLoggedIn" :to="{ name: 'ingredients',  isLoggedIn: isLoggedIn}" label="My Ingredients" />
+        <q-route-tab v-if="isLoggedIn" :to="{ name: 'buyList',  isLoggedIn: isLoggedIn}" label="Alışveriş Listesi" />
         <q-route-tab v-if="!isLoggedIn" to="/login" label="Login" />
         <q-route-tab v-if="!isLoggedIn" to="/register" label="Register" />
       </q-tabs>
@@ -79,16 +80,16 @@ const userStore = useUserStore()
       <q-scroll-area class="fit">
         <q-list>
 
-          <q-item >
+          <q-item>
             <q-item-section>
-              {{userStore.getUserName}}
+              {{userStore.getUserName }}
             </q-item-section>
           </q-item>
           <q-separator />
 
-          <q-item >
+          <q-item>
             <q-item-section>
-              <q-btn v-if="isLoggedIn" color="white" text-color="black" label="Logout"  @click="handleSignOut"/>
+              <q-btn v-if="isLoggedIn" color="white" text-color="black" label="Logout" @click="handleSignOut" />
             </q-item-section>
           </q-item>
           <q-separator />

@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h4>Sign in to an Account</h4>
+    <h4>Log in to an Account</h4>
   <q-input filled v-model="email" label="Email" autofocus true type="email" class="col-6" placeholder="sample@gmail.com" />
   <q-input filled v-model="password" label="Password"  true type="password" class="col-6" />
   <q-banner v-if="signInErrorMessage" inline-actions class="text-white bg-red">
@@ -20,8 +20,9 @@
 
 <script setup>
 import { ref } from "vue";
-import { getAuth, signInWithEmailAndPassword,GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword,GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth"
 import {useUserStore} from "../stores/user"
+import {createUser} from "../lib/user.api"
 import router from "../router";
 
 const email = ref("")
@@ -51,11 +52,16 @@ const login = async () => {
 }
  const signInWithGoogle = () => {
   const provider = new GoogleAuthProvider();
-  signInWithPopup(getAuth(), provider).then((result) => {
+  signInWithRedirect(getAuth(), provider).then((result) => {
     console.log(result.user)
     userStore.user = result.user
-    //Todo: store user id for accessing its data 
-    console.log(result.user.uid);
+    createUser({
+      user_id: result.user.uid,
+      name: result.user.displayName,
+      signed_in_at: Date.now(),
+      ingredients_list: [],
+      buy_list: []
+    })
     router.push("/ingredients")
   })
   .catch((error) => {
