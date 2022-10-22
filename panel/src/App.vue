@@ -68,7 +68,7 @@ const userStore = useUserStore()
       <q-tabs align="center">
         <q-route-tab v-if="isLoggedIn" :to="{ name: 'randomRecipe' }" label="I'm Feeling Lucky" />
         <q-route-tab v-if="isLoggedIn" :to="{ name: 'ingredients',  isLoggedIn: isLoggedIn}" label="My Ingredients" />
-        <q-route-tab v-if="isLoggedIn" :to="{ name: 'buyList',  isLoggedIn: isLoggedIn}" label="Alışveriş Listesi" />
+        <!-- <q-route-tab v-if="isLoggedIn" :to="{ name: 'buyList',  isLoggedIn: isLoggedIn}" label="Alışveriş Listesi" /> -->
         <q-route-tab v-if="!isLoggedIn" to="/login" label="Login" />
         <q-route-tab v-if="!isLoggedIn" to="/register" label="Register" />
       </q-tabs>
